@@ -7,3 +7,4 @@ enum State {DEFAULT, FISHING, BUILDING, SHOP}
 enum Machine {SPRINKLER, FISHER, SCARECROW, DELETE}
 enum Item {WOOD, APPLE, TOMATO, CORN, WHEAT, PUMPKIN, FISH}
 enum Shop {MAIN, HAT}
+var forecast_rain: bool = false
