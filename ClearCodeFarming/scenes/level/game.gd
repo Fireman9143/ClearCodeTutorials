@@ -5,11 +5,25 @@ var plant_info_scene = preload("res://scenes/UI/plant_info.tscn")
 @onready var blob_scene: PackedScene = preload("res://scenes/enemy/blob.tscn")
 @onready var plant_scene: PackedScene = preload("res://scenes/level/plant.tscn")
 @export var daytime_gradient: Gradient
+@export var rain_color: Color
+var raining: bool:
+	set(value):
+		raining = value
+		$Layers/RainDropSplash.emitting = value
+		$CanvasLayer/RainDropParticles.emitting = value
+@export_range(0.0, 100.0, 1.0) var rain_chance_percent: float = randf_range(0.0, 100.0)
+var randomf: float
+var rain_chance: float
 var used_cells: Array[Vector2i]
+	
+func _ready() -> void:
+	check_mud()
+	create_forcast()
+	
 	
 func _process(_delta: float) -> void:
 	var daytime_point: float = 1.0 - ($DayTimer.time_left / $DayTimer.wait_time)
-	$CanvasModulate.color = daytime_gradient.sample(daytime_point)
+	$CanvasModulate.color = daytime_gradient.sample(daytime_point).lerp(rain_color, 0.5 if raining else 0.0)
 	if Input.is_action_just_pressed("ui_focus_next"):
 		day_switch()
 	var player_pos = player.position + player.player_last_direction * player.tool_direction_offset + Vector2(0, player.tool_y_offset)
@@ -29,6 +43,8 @@ func _on_player_tool_use(tool: int, pos: Vector2) -> void:
 			var cell = $Layers/GrassLayer.get_cell_tile_data(grid_pos) as TileData
 			if cell and cell.get_custom_data("usable"):
 				$Layers/SoilLayer.set_cells_terrain_connect([grid_pos], 0, 0)
+				if raining:
+					$Layers/SoilWaterLayer.set_cell(grid_pos, 1, Vector2i(randi_range(0,2), 0))
 		Global.Tools.WATER:
 			if has_soil:
 				$Layers/SoilWaterLayer.set_cell(grid_pos, 1, Vector2i(randi_range(0,2), 0))
@@ -80,7 +96,10 @@ func level_reset():
 		tree.create_apples()
 		tree.health = tree.number_of_apples + 1
 	$DayTimer.start()
-	$CanvasLayer/PlantInfoContainer.update_all()	
+	$CanvasLayer/PlantInfoContainer.update_all()
+	raining = Global.forecast_rain
+	create_forcast()
+	check_mud()
 
 func _on_enemy_spawn_timer_timeout() -> void:
 	var blob_count = get_tree().get_nodes_in_group("blobs")
@@ -92,3 +111,16 @@ func _on_enemy_spawn_timer_timeout() -> void:
 
 func plant_death(coord: Vector2i):
 	used_cells.erase(coord)
+
+func create_forcast():
+	#randomize()
+	rain_chance_percent = randi_range(0, 100)
+	rain_chance = rain_chance_percent/100
+	Global.forecast_rain = true if rain_chance > 0.5 else false
+	
+func check_mud():
+	if raining:
+		for cell in $Layers/SoilLayer.get_used_cells():
+			$Layers/SoilWaterLayer.set_cell(cell, 1, Vector2i(randi_range(0,2), 0))
+	else:
+		$Layers/SoilWaterLayer.clear()
