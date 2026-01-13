@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3 uid="uid://d0k0q021olspa"]
+
+[ext_resource type="Script" uid="uid://clybnptfklnru" path="res://scenes/UI/fishing_game.gd" id="1_f2e1h"]
+[ext_resource type="Texture2D" uid="uid://dbv3oew4tthfs" path="res://graphics/ui/fish_frame.png" id="1_lbgt4"]
+[ext_resource type="Texture2D" uid="uid://cdrr2vqumpteb" path="res://graphics/ui/fish_progress_bg.png" id="3_su5um"]
+[ext_resource type="Texture2D" uid="uid://b1o52iinoc5eq" path="res://graphics/ui/fish_progress.png" id="4_ghxic"]
+[ext_resource type="Texture2D" uid="uid://2flarflevi48" path="res://graphics/ui/bar.png" id="5_44koj"]
+[ext_resource type="Texture2D" uid="uid://cufccts2vhufa" path="res://graphics/icons/goldfish.png" id="6_cqgjg"]
+
+[node name="FishingGame" type="Node2D"]
+z_index = 2
+script = ExtResource("1_f2e1h")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Control"]
+custom_minimum_size = Vector2(20, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_lbgt4")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 20
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Control"]
+custom_minimum_size = Vector2(10, 150)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 20.0
+fill_mode = 3
+nine_patch_stretch = true
+stretch_margin_left = 4
+stretch_margin_top = 4
+stretch_margin_right = 4
+stretch_margin_bottom = 4
+texture_under = ExtResource("3_su5um")
+texture_progress = ExtResource("4_ghxic")
+
+[node name="FishingBar" type="Sprite2D" parent="."]
+texture = ExtResource("5_44koj")
+
+[node name="Fish" type="Sprite2D" parent="."]
+texture = ExtResource("6_cqgjg")
+
+[node name="FishUpdateTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="value_changed" from="Control/TextureProgressBar" to="." method="_on_texture_progress_bar_value_changed"]
+[connection signal="timeout" from="FishUpdateTimer" to="." method="_on_fish_update_timer_timeout"]

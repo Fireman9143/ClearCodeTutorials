@@ -27,6 +27,7 @@ offset_right = 47.0
 offset_bottom = 50.0
 theme = SubResource("Theme_v621c")
 script = ExtResource("3_gh2lg")
+metadata/_edit_vertical_guides_ = [136.0]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
