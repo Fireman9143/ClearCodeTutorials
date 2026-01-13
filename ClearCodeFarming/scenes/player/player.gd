@@ -10,8 +10,7 @@ var player_speed: int = 70
 @onready var move_state_machine: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/MoveeStateMachine/playback")
 @onready var tool_state_machine: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/ToolStateMachine/playback")
 var can_move: bool = true
-
-
+var current_state: Global.State =  Global.State.DEFAULT
 var current_tool: Global.Tools = Global.Tools.SWORD
 const tool_connect = {
 	Global.Tools.HOE: "hoe",
@@ -27,37 +26,47 @@ var current_seed: Global.Seeds = Global.Seeds.CORN
 signal seed_use(seed: Global.Seeds, pos: Vector2)
 
 signal diagnose
+signal day_change
 
 func _physics_process(_delta: float) -> void:
-	if can_move:
-		get_input()
-	if player_direction:
-		player_last_direction = player_direction
-		if $Sounds/WalkTimer.is_stopped():
-			$Sounds/WalkTimer.timeout.emit()
-			$Sounds/WalkTimer.start()
-	else:
-		$Sounds/WalkTimer.stop()
-	velocity = player_direction * player_speed * int(can_move)
-	move_and_slide()
-	animation()
+	match current_state:
+		Global.State.DEFAULT:
+			if can_move:
+				get_input()
+			if player_direction:
+				player_last_direction = player_direction
+				var ray_direction = int(player_direction.y) if not player_direction.x else 0
+				$RayCast2D.target_position = Vector2(player_direction.x, ray_direction).normalized() * 20
+				if $Sounds/WalkTimer.is_stopped():
+					$Sounds/WalkTimer.timeout.emit()
+					$Sounds/WalkTimer.start()
+			else:
+				$Sounds/WalkTimer.stop()
+			velocity = player_direction * player_speed * int(can_move)
+			move_and_slide()
+			animation()
+		Global.State.FISHING:
+			get_fishing_input()
 	
 func get_input():
 	player_direction = Input.get_vector("left", "right", "up", "down")
 	
 	if Input.is_action_just_pressed("action"):
-		tool_state_machine.travel(tool_connect[current_tool])
-		$AnimationTree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-		can_move = false
-		if current_tool in [Global.Tools.HOE, Global.Tools.WATER, Global.Tools.FISH, Global.Tools.SEED, Global.Tools.SWORD]:
-			await $AnimationTree.animation_finished
-			tool_use.emit(current_tool, position + player_last_direction * tool_direction_offset + Vector2(0, tool_y_offset))
-			if current_tool == Global.Tools.HOE:
-				$Sounds/HoeSound.play()
-			elif current_tool == Global.Tools.WATER:
-				$Sounds/WaterSound.play()
-			else:
-				$Sounds/FishSound.play()
+		if not $RayCast2D.get_collider():
+			tool_state_machine.travel(tool_connect[current_tool])
+			$AnimationTree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			can_move = false
+			if current_tool in [Global.Tools.HOE, Global.Tools.WATER, Global.Tools.FISH, Global.Tools.SEED, Global.Tools.SWORD]:
+				await $AnimationTree.animation_finished
+				tool_use.emit(current_tool, position + player_last_direction * tool_direction_offset + Vector2(0, tool_y_offset))
+				if current_tool == Global.Tools.HOE:
+					$Sounds/HoeSound.play()
+				elif current_tool == Global.Tools.WATER:
+					$Sounds/WaterSound.play()
+				else:
+					$Sounds/FishSound.play()
+		else:
+			$RayCast2D.get_collider().interact(self)
 				
 	if Input.is_action_just_pressed("tool_forward") or Input.is_action_just_pressed("tool_backward"):
 		var dir = Input.get_axis("tool_backward", "tool_forward")
@@ -78,12 +87,18 @@ func get_input():
 		can_move = true
 	if Input.is_action_just_pressed("diagnose"):
 		diagnose.emit()
+
+func get_fishing_input():
+	if Input.is_action_just_pressed("action"):
+		$FishingGame.action()
+		
 func animation():
 	if player_direction:
 		move_state_machine.travel("walk")
 		var rounded_direction: Vector2 = Vector2(round(player_direction.x), round(player_direction.y))
 		$AnimationTree.set("parameters/MoveeStateMachine/walk/blend_position", rounded_direction)
 		$AnimationTree.set("parameters/MoveeStateMachine/idle/blend_position", rounded_direction)
+		$AnimationTree.set("parameters/Fishing/blend_position", rounded_direction)
 		for state in tool_connect.values():
 			$AnimationTree.set("parameters/ToolStateMachine/" + state + "/blend_position", rounded_direction)
 	else:
@@ -97,3 +112,16 @@ func axe_use():
 
 func _on_walk_timer_timeout() -> void:
 	$Sounds/WalkSound.play()
+
+func day_change_emit():
+	day_change.emit()
+
+func start_fishing():
+	$FishingGame.reveal()
+	current_state = Global.State.FISHING
+	$AnimationTree.set('parameters/FishBlend/blend_amount', 1)
+
+func stop_fishing():
+	can_move = true
+	current_state = Global.State.DEFAULT
+	$AnimationTree.set('parameters/FishBlend/blend_amount', 0)

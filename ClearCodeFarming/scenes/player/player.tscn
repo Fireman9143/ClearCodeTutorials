@@ -1,4 +1,4 @@
-[gd_scene load_steps=147 format=3 uid="uid://ca106qafnt25o"]
+[gd_scene load_steps=159 format=3 uid="uid://ca106qafnt25o"]
 
 [ext_resource type="Script" uid="uid://6foo5tiiup7q" path="res://scenes/player/player.gd" id="1_dovo2"]
 [ext_resource type="Texture2D" uid="uid://dbt25yyl3he6f" path="res://graphics/characters/main_basic.png" id="2_0owmy"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://dff6xghytlqqh" path="res://audio/step.mp3" id="6_5gtgg"]
 [ext_resource type="AudioStream" uid="uid://bvfnqpritby3f" path="res://audio/fish.wav" id="7_0owmy"]
 [ext_resource type="PackedScene" uid="uid://dgi540icjvxq6" path="res://scenes/UI/tool_ui.tscn" id="8_qek5x"]
+[ext_resource type="PackedScene" uid="uid://d0k0q021olspa" path="res://scenes/UI/fishing_game.tscn" id="9_5gtgg"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yewv4"]
 radius = 3.0
@@ -709,6 +710,55 @@ _data = {
 &"water_up": SubResource("Animation_eir2k")
 }
 
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_qek5x"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uygh0"]
+animation = &"fish_left_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t1aof"]
+animation = &"fish_right_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w8qe1"]
+animation = &"fish_down_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hdvrm"]
+animation = &"fish_up_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5xbmr"]
+animation = &"fish_down_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hir57"]
+animation = &"fish_right_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7072n"]
+animation = &"fish_right_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gmu8b"]
+animation = &"fish_left_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a38bk"]
+animation = &"fish_left_idle"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_3chqh"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_uygh0")
+blend_point_0/pos = Vector2(-1, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_t1aof")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_w8qe1")
+blend_point_2/pos = Vector2(0, 1)
+blend_point_3/node = SubResource("AnimationNodeAnimation_hdvrm")
+blend_point_3/pos = Vector2(0, -1)
+blend_point_4/node = SubResource("AnimationNodeAnimation_5xbmr")
+blend_point_4/pos = Vector2(0, 0)
+blend_point_5/node = SubResource("AnimationNodeAnimation_hir57")
+blend_point_5/pos = Vector2(1, 1)
+blend_point_6/node = SubResource("AnimationNodeAnimation_7072n")
+blend_point_6/pos = Vector2(1, -0.9)
+blend_point_7/node = SubResource("AnimationNodeAnimation_gmu8b")
+blend_point_7/pos = Vector2(-1, 1)
+blend_point_8/node = SubResource("AnimationNodeAnimation_a38bk")
+blend_point_8/pos = Vector2(-1, -1)
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gmlin"]
 animation = &"idle_right"
 
@@ -1162,15 +1212,19 @@ transitions = ["Start", "axe", SubResource("AnimationNodeStateMachineTransition_
 graph_offset = Vector2(-64, 51)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_6eyoc"]
-graph_offset = Vector2(-224.823, 102.636)
+graph_offset = Vector2(75.3268, 87.0579)
+nodes/FishBlend/node = SubResource("AnimationNodeBlend2_qek5x")
+nodes/FishBlend/position = Vector2(1040, 80)
+nodes/Fishing/node = SubResource("AnimationNodeBlendSpace2D_3chqh")
+nodes/Fishing/position = Vector2(840, 220)
 nodes/MoveeStateMachine/node = SubResource("AnimationNodeStateMachine_5gtgg")
 nodes/MoveeStateMachine/position = Vector2(360, 0)
 nodes/OneShot/node = SubResource("AnimationNodeOneShot_dovo2")
 nodes/OneShot/position = Vector2(660, 100)
 nodes/ToolStateMachine/node = SubResource("AnimationNodeStateMachine_vwwfy")
 nodes/ToolStateMachine/position = Vector2(360, 200)
-nodes/output/position = Vector2(888, 144)
-node_connections = [&"OneShot", 0, &"MoveeStateMachine", &"OneShot", 1, &"ToolStateMachine", &"output", 0, &"OneShot"]
+nodes/output/position = Vector2(1240, 100)
+node_connections = [&"FishBlend", 0, &"OneShot", &"FishBlend", 1, &"Fishing", &"OneShot", 0, &"MoveeStateMachine", &"OneShot", 1, &"ToolStateMachine", &"output", 0, &"FishBlend"]
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -1194,6 +1248,8 @@ libraries = {
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeBlendTree_6eyoc")
 anim_player = NodePath("../AnimationPlayer")
+parameters/FishBlend/blend_amount = 0
+parameters/Fishing/blend_position = Vector2(0.994764, 0.010989)
 parameters/MoveeStateMachine/idle/blend_position = Vector2(0, 0)
 parameters/MoveeStateMachine/walk/blend_position = Vector2(0, 0)
 parameters/OneShot/active = false
@@ -1207,8 +1263,9 @@ parameters/ToolStateMachine/sword/blend_position = Vector2(0, 0)
 parameters/ToolStateMachine/water/blend_position = Vector2(0, 0)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
 position_smoothing_enabled = true
-position_smoothing_speed = 20.0
+position_smoothing_speed = 30.0
 
 [node name="Sounds" type="Node2D" parent="."]
 
@@ -1234,6 +1291,14 @@ position = Vector2(0, 1)
 stream = ExtResource("7_0owmy")
 
 [node name="ToolUI" parent="." instance=ExtResource("8_qek5x")]
+z_index = 1
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, 20)
+collision_mask = 0
+
+[node name="FishingGame" parent="." instance=ExtResource("9_5gtgg")]
+position = Vector2(40, 0)
 
 [connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="timeout" from="Sounds/WalkTimer" to="." method="_on_walk_timer_timeout"]
