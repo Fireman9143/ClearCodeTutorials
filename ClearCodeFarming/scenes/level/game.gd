@@ -4,6 +4,7 @@ var plant_info_scene = preload("res://scenes/UI/plant_info.tscn")
 @onready var player = $Objects/Player
 @onready var blob_scene: PackedScene = preload("res://scenes/enemy/blob.tscn")
 @onready var plant_scene: PackedScene = preload("res://scenes/level/plant.tscn")
+#@onready var Bed_scene: PackedScene = preload("res://scenes/characters/bed.tscn")
 @export var daytime_gradient: Gradient
 @export var rain_color: Color
 var raining: bool:
@@ -19,7 +20,6 @@ var used_cells: Array[Vector2i]
 func _ready() -> void:
 	check_mud()
 	create_forcast()
-	
 	
 func _process(_delta: float) -> void:
 	var daytime_point: float = 1.0 - ($DayTimer.time_left / $DayTimer.wait_time)
@@ -56,7 +56,7 @@ func _on_player_tool_use(tool: int, pos: Vector2) -> void:
 					tree.health -= 1
 		Global.Tools.FISH:
 			if not grid_pos in $Layers/GrassLayer.get_used_cells():
-				print("fishing")
+				$Objects/Player.start_fishing()
 		Global.Tools.SWORD:
 			for blob in get_tree().get_nodes_in_group("blobs"):
 				if (player.position.distance_to(blob.position)) <= 20:
@@ -124,3 +124,6 @@ func check_mud():
 			$Layers/SoilWaterLayer.set_cell(cell, 1, Vector2i(randi_range(0,2), 0))
 	else:
 		$Layers/SoilWaterLayer.clear()
+
+func _on_player_day_change() -> void:
+	day_switch()
