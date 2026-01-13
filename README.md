@@ -6,8 +6,8 @@ Started with farming tutorial from the Ultimate Godot Tutorial and adapted the G
 
 If anyone stumbles on this, these issues are from my own learning path and should not reflect on the tutorial I am following:
 
-Differences noted betweeen the two additions:
-Character animation frames updated to reflect Godot Valley character.
+Differences noted betweeen the two additions:/n
+Character animation frames updated to reflect Godot Valley character./n
 No global enums or data files. These enums are created within each associated file, such as plant.gd (I did expand the Globals folder though)
 Changed the physics layer on terrain from the water tile to the edges of the grass tiles.
 No resource node used.  This requires another signal to be connected using emit_signal("signalName") instead of emit_changed("signalName), and connected to the game script in a standard way.
