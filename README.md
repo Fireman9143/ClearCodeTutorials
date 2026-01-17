@@ -20,3 +20,4 @@ Current issues working:
 HOUSE WALL TILEMAP IS NOT APPLYING CORRECTLY
 There is currently an animation for seed that is activated with the spacebar, and the same animation when you plant a seed with "F".  This redundancy needs to be reconciled.  Plan to get rid of "F" plant action and just have planting as a regular action.  Hopefully this will simplify future game controller integration?
 The blobs were created to attack the player.  Oops. The blob code will need to be totally reworked.  
+Discovered that apples reappear over a stump after a certain time, and don't always go back to if partially picked (unless it added a third in the same place).
