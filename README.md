@@ -6,6 +6,7 @@ Started with farming tutorial from the Ultimate Godot Tutorial and adapted the G
 
 If anyone stumbles on this, these issues are from my own learning path and should not reflect on the tutorial I am following:
 
+THERE ARE A COUPLE ISSUES THAT I WILL NEED TO CORRECT.  FIRST, THE TV AND BED SCENES NEED TO BE ADDED TO A CHARACTERS FOLDER IN THE SCENES FOLDER. SECOND, WHEN CREATING THIS REPOSITORY THE GRAPHICS FOLDER ENDED UP AS GRAPHICS/CHARACTERS AND ALL THE OTHER FOLDERS UNDER GRAPHICS GOT STUCK UNDER CHARACTERS. WHEN DOWNLOADING, MOVE ALL THE FOLDERS FROM CHARACTERS TO GRAPHICS.
 Differences noted betweeen the two additions:
 Character animation frames updated to reflect Godot Valley character.
 No global enums or data files. These enums are created within each associated file, such as plant.gd (I did expand the Globals folder though)
