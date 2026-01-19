@@ -4,7 +4,7 @@ var plant_info_scene = preload("res://scenes/UI/plant_info.tscn")
 @onready var player = $Objects/Player
 @onready var blob_scene: PackedScene = preload("res://scenes/enemy/blob.tscn")
 @onready var plant_scene: PackedScene = preload("res://scenes/level/plant.tscn")
-#@onready var Bed_scene: PackedScene = preload("res://scenes/characters/bed.tscn")
+@onready var projectile_scene: PackedScene = preload("res://scenes/characters/projectile.tscn")
 @export var daytime_gradient: Gradient
 @export var rain_color: Color
 var raining: bool:
@@ -20,6 +20,7 @@ var used_cells: Array[Vector2i]
 func _ready() -> void:
 	check_mud()
 	create_forcast()
+	$Objects/Scarecrow.connect("shoot", create_projectile)
 	
 func _process(_delta: float) -> void:
 	var daytime_point: float = 1.0 - ($DayTimer.time_left / $DayTimer.wait_time)
@@ -127,3 +128,8 @@ func check_mud():
 
 func _on_player_day_change() -> void:
 	day_switch()
+
+func create_projectile(start_pos: Vector2, proj_dir: Vector2):
+	var projectile = projectile_scene.instantiate()
+	projectile.setup(start_pos, proj_dir)
+	$Objects.add_child(projectile)
