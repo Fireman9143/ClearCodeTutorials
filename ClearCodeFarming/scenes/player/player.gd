@@ -12,6 +12,17 @@ var player_speed: int = 70
 var can_move: bool = true
 var current_state: Global.State =  Global.State.DEFAULT
 var current_tool: Global.Tools = Global.Tools.SWORD
+var current_style: Global.Style = Global.Style.BASIC
+
+const player_skins = {
+	Global.Style.BASIC: preload("res://graphics/characters/main_basic.png"),
+	Global.Style.BASEBALL: preload("res://graphics/characters/main_blue.png"),
+	Global.Style.COWBOY: preload("res://graphics/characters/main_cowboy.png"),
+	Global.Style.ENGLISH: preload("res://graphics/characters/main_grey.png"),
+	Global.Style.STRAW: preload("res://graphics/characters/main_straw.png"),
+	Global.Style.BEANIE: preload("res://graphics/characters/main_red.png"),
+}
+
 const tool_connect = {
 	Global.Tools.HOE: "hoe",
 	Global.Tools.AXE: "axe",
@@ -87,7 +98,10 @@ func get_input():
 		can_move = true
 	if Input.is_action_just_pressed("diagnose"):
 		diagnose.emit()
-
+	if Input.is_action_just_pressed("toggle_style"):
+		current_style = posmod(current_style + 1, Global.Style.size()) as Global.Style
+		$Sprite2D.texture = player_skins[current_style]
+		
 func get_fishing_input():
 	if Input.is_action_just_pressed("action"):
 		$FishingGame.action()
