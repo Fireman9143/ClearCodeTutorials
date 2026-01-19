@@ -28,8 +28,8 @@ HOUSE WALL TILEMAP IS NOT APPLYING CORRECTLY
 
 There is currently an animation for seed that is activated with the spacebar, and the same animation when you plant a seed with "F".  This redundancy needs to be reconciled.  Plan to get rid of "F" plant action and just have planting as a regular action.  Hopefully this will simplify future game controller integration?
 
-The blobs were created to attack the player.  Oops. The blob code will need to be totally reworked.  
+The blobs were created to attack the player.  Oops. The blob code will need to be totally reworked. Blobs will spawn on top of the same spawn point.  Trying to figure out logic to prevent that.  Blob push() does not work with either sword or scarecrow projectile.
 
 Discovered that apples reappear over a stump after a certain time, and don't always go back to if partially picked (unless it added a third in the same place).
 
-When accessing the blobs group in the scarecrow script, there is an issue of invalid access to property or key 'position' for CharacterBody2D.  Searching this error implies that the position is being accessed before the node is ready.  I have tried disbaling the code in the game scene that generates my blobs and statically adding them to the game scene Objects folder, and I get the same issue. There is no problem accessing the blobs group from the game scene to generate the enemies on the spawn points.  I am working on making sure the blobs don't generate on top of each other as well.
+
