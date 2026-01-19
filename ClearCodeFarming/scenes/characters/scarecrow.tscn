@@ -20,7 +20,6 @@ texture = ExtResource("2_my4tt")
 hframes = 4
 
 [node name="Timer" type="Timer" parent="." index="2"]
-wait_time = 10.0
 autostart = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

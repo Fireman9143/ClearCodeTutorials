@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://bte0fug3ivg5i"]
+
+[ext_resource type="Script" uid="uid://da0kyccauou72" path="res://scenes/characters/projectile.gd" id="1_n2b2k"]
+[ext_resource type="Texture2D" uid="uid://bcs34147dv0mx" path="res://graphics/machines/projectile.png" id="2_0c1vm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ki37c"]
+radius = 3.0
+
+[node name="Projectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_n2b2k")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_0c1vm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ki37c")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,14 +1,16 @@
 extends Machine
 
-	
-func get_closest_blob() -> CharacterBody2D:
-	var blobs = get_tree().get_nodes_in_group("blobs")
-	var nearest = blobs[3]
+signal shoot(start_pos: Vector2, proj_direction: Vector2)
+
+func get_closest_blob(blobs: Array) -> CharacterBody2D:
+	var nearest = blobs[0]
 	for blob in blobs:
-		if blob.postion.distance_to(position) <= nearest.position.distance_to(position):
+		if blob.position.distance_to(position) <= nearest.position.distance_to(position):
 			nearest = blob
 	return nearest
 			
 
 func _on_timer_timeout() -> void:
-	print(get_closest_blob())
+	var blobs = get_tree().get_nodes_in_group("blobs")
+	if blobs:
+		shoot.emit(position, (get_closest_blob(blobs).position - position).normalized())
