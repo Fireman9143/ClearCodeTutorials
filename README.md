@@ -24,6 +24,8 @@ Blob hit does not need the tool enum for ax or sword.
 
 Took an idea for random weather from the Udemy course, adapted it to randomly change the forecast and update weather.
 
+Trying to get the blobs to attack the plants without the plant resource was tricky.  I probably have way too many death/dying signals at this point, and I'm not entirely sure how I got it to work, but it works.  In order to get the plant info boxes to update in real time without a level_reset(), I called plant_info_container.update_all() in the game _process loop.
+
 CURRENT ISSUES WORKING:
 
 HOUSE WALL TILEMAP IS NOT APPLYING CORRECTLY
