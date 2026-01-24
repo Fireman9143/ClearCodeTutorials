@@ -1,5 +1,23 @@
 extends Machine
 
+const animations = {
+	Vector2i.DOWN: "down",
+	Vector2i.LEFT: "left",
+	Vector2i.RIGHT: "right",
+	Vector2i.UP: "up",
+}
+var direction := Vector2i.DOWN
+
+func setup(pos: Vector2, level: Node2D, parent: Node2D):
+	var grass_layer = level.get_node("Layers/GrassLayer") as TileMapLayer
+	var fish_coord = pos / 16
+	fish_coord.x -= 1 if pos.x < 0 else 0
+	fish_coord.y -= 1 if pos.y < 0 else 0
+	var tile_data = grass_layer.get_cell_tile_data(fish_coord) as TileData
+	if tile_data.get_custom_data("coast"):
+		direction = tile_data.get_custom_data("coast")
+		super.setup(pos, level, parent)
+		
 func _ready() -> void:
 	start_fishing()
 	
@@ -13,7 +31,7 @@ func _on_timer_timeout() -> void:
 	
 	
 func start_fishing():
-	$AnimatedSprite2D.play("left")
+	$AnimatedSprite2D.play(animations[direction])
 	await $AnimatedSprite2D.animation_finished
-	$AnimatedSprite2D.play("left_idle")
+	$AnimatedSprite2D.play(animations[direction] + "_idle")
 	$Timer.start()
