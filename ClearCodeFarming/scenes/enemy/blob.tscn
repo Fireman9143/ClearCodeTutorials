@@ -461,10 +461,10 @@ states/idle/position = Vector2(393, 100)
 states/move/node = SubResource("AnimationNodeBlendSpace2D_3q4u0")
 states/move/position = Vector2(554, 15)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_o74f8"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_jt7x3"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_xua3l"), "move", "explode", SubResource("AnimationNodeStateMachineTransition_hjfeg"), "idle", "explode", SubResource("AnimationNodeStateMachineTransition_mlr86")]
-graph_offset = Vector2(-120, -25)
+graph_offset = Vector2(-69, -36)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yme10"]
-graph_offset = Vector2(-459.909, 90.2727)
+graph_offset = Vector2(-299.4, 78.4)
 nodes/BlobMoveStateMachine/node = SubResource("AnimationNodeStateMachine_cmk02")
 nodes/BlobMoveStateMachine/position = Vector2(-120, 140)
 node_connections = [&"output", 0, &"BlobMoveStateMachine"]
