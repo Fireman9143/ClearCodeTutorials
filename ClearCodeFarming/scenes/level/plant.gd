@@ -9,13 +9,17 @@ var max_age: int
 var grow_speed: float
 var death_max: int
 var reward: int
-var death_count: int
+var death_count: int:
+	set(value):
+		death_count = value
+		emit_signal("dying")
 var is_dead: bool:
 	set(value):
 		is_dead = value
 		emit_signal("died")
 signal death(grid_pos: Vector2i)
 signal died(is_dead: bool)
+signal dying
 
 const plant_data = {
 	Global.Seeds.CORN: {
@@ -64,6 +68,13 @@ func setup(seed_enum: Global.Seeds, grid_position: Vector2i, plant_death_functio
 	death_max = plant_data[seed_enum]['death_max']
 	grid_pos = grid_position
 	death.connect(plant_death_function)
+	dying.connect(update)
+	
+func update():
+	if death_count >= death_max:
+		queue_free()
+		is_dead = true
+		death.emit(grid_pos)
 	
 func grow(watered: bool):
 	if watered:
@@ -82,3 +93,6 @@ func _on_area_2d_body_entered(_body: Node2D) -> void:
 		queue_free()
 		is_dead = true
 		death.emit(grid_pos)
+
+func damage():
+	death_count += 1
