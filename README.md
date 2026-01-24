@@ -20,6 +20,8 @@ No resource node used.  This requires another signal to be connected using emit_
 
 Instead of a flash sprite that can be utilized for several things, I stayed with the flash shader for the tree and blobs.  No plant flash right now.
 
+Blob hit does not need the tool enum for ax or sword.
+
 Took an idea for random weather from the Udemy course, adapted it to randomly change the forecast and update weather.
 
 CURRENT ISSUES WORKING:
@@ -28,8 +30,12 @@ HOUSE WALL TILEMAP IS NOT APPLYING CORRECTLY
 
 There is currently an animation for seed that is activated with the spacebar, and the same animation when you plant a seed with "F".  This redundancy needs to be reconciled.  Plan to get rid of "F" plant action and just have planting as a regular action.  Hopefully this will simplify future game controller integration?
 
-The blobs were created to attack the player.  Oops. The blob code will need to be totally reworked. Blobs will spawn on top of the same spawn point.  Trying to figure out logic to prevent that.  Blob push() does not work with either sword or scarecrow projectile.
+Reworking blobs. Blobs will spawn on top of the same spawn point.  Trying to figure out logic to prevent that.  Blob push() does not work with sword.
 
 Discovered that apples reappear over a stump after a certain time, and don't always go back to if partially picked (unless it added a third in the same place).
+
+When the blobs are killed it causes an error with the tween.  Not sure what's happening yet.
+
+If a plant is placed on a watered spot, the water spot goes away.  Not a huge issue because the sprinkler will recover, just a glitch.
 
 
