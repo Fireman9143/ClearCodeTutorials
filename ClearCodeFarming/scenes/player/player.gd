@@ -13,7 +13,7 @@ var can_move: bool = true
 var current_state: Global.State =  Global.State.DEFAULT
 var current_tool: Global.Tools = Global.Tools.SWORD
 var current_style: Global.Style = Global.Style.BASIC
-
+var current_machine: Global.Machine = Global.Machine.SPRINKLER
 const player_skins = {
 	Global.Style.BASIC: preload("res://graphics/characters/main_basic.png"),
 	Global.Style.BASEBALL: preload("res://graphics/characters/main_blue.png"),
@@ -38,35 +38,45 @@ signal seed_use(seed: Global.Seeds, pos: Vector2)
 
 signal diagnose
 signal day_change
+signal build(current_machine: Global.Machine)
+signal machine_change(current_machine: Global.Machine)
 
 func _physics_process(_delta: float) -> void:
 	match current_state:
 		Global.State.DEFAULT:
 			if can_move:
 				get_input()
-			if player_direction:
-				player_last_direction = player_direction
-				var ray_direction = int(player_direction.y) if not player_direction.x else 0
-				$RayCast2D.target_position = Vector2(player_direction.x, ray_direction).normalized() * 20
-				if $Sounds/WalkTimer.is_stopped():
-					$Sounds/WalkTimer.timeout.emit()
-					$Sounds/WalkTimer.start()
-			else:
-				$Sounds/WalkTimer.stop()
-			velocity = player_direction * player_speed * int(can_move)
-			move_and_slide()
+			move()
 			animation()
 		Global.State.FISHING:
 			get_fishing_input()
-	
-func get_input():
+		Global.State.BUILDING:
+			get_building_input()
+			move()
+			animation()
+			
+func move():
 	player_direction = Input.get_vector("left", "right", "up", "down")
-	
+	if player_direction:
+		player_last_direction = player_direction
+		var ray_direction = int(player_direction.y) if not player_direction.x else 0
+		$RayCast2D.target_position = Vector2(player_direction.x, ray_direction).normalized() * 20
+		if $Sounds/WalkTimer.is_stopped():
+			$Sounds/WalkTimer.timeout.emit()
+			$Sounds/WalkTimer.start()
+	else:
+		$Sounds/WalkTimer.stop()
+	velocity = player_direction * player_speed * int(can_move)
+	move_and_slide()
+		
+func get_input():
 	if Input.is_action_just_pressed("action"):
 		if not $RayCast2D.get_collider():
 			tool_state_machine.travel(tool_connect[current_tool])
 			$AnimationTree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 			can_move = false
+			$Sounds/WalkSound.stop()
+			$Sounds/WalkTimer.stop()
 			if current_tool in [Global.Tools.HOE, Global.Tools.WATER, Global.Tools.FISH, Global.Tools.SEED, Global.Tools.SWORD]:
 				await $AnimationTree.animation_finished
 				tool_use.emit(current_tool, position + player_last_direction * tool_direction_offset + Vector2(0, tool_y_offset))
@@ -90,6 +100,8 @@ func get_input():
 		tool_state_machine.travel(tool_connect[current_tool])
 		$AnimationTree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		can_move = false
+		$Sounds/WalkSound.stop()
+		$Sounds/WalkTimer.stop()
 		player_direction = Vector2.ZERO
 		await $AnimationTree.animation_finished
 		tool_use.emit(current_tool, position + player_last_direction * tool_direction_offset + Vector2(0, tool_y_offset))
@@ -101,10 +113,22 @@ func get_input():
 	if Input.is_action_just_pressed("toggle_style"):
 		current_style = posmod(current_style + 1, Global.Style.size()) as Global.Style
 		$Sprite2D.texture = player_skins[current_style]
+	if Input.is_action_just_pressed("build"):
+		current_state = Global.State.BUILDING
 		
 func get_fishing_input():
 	if Input.is_action_just_pressed("action"):
 		$FishingGame.action()
+		
+func get_building_input():
+	if Input.is_action_just_pressed("build"):
+		current_state = Global.State.DEFAULT
+	if Input.is_action_just_pressed("tool_forward") or Input.is_action_just_pressed("tool_backward"):
+		var dir = Input.get_axis("tool_backward", "tool_forward")
+		current_machine = posmod(current_machine + int(dir), Global.Machine.size()) as Global.Machine
+		machine_change.emit(current_machine)
+	if Input.is_action_just_pressed("action"):
+		build.emit(current_machine)
 		
 func animation():
 	if player_direction:
@@ -139,3 +163,10 @@ func stop_fishing():
 	can_move = true
 	current_state = Global.State.DEFAULT
 	$AnimationTree.set('parameters/FishBlend/blend_amount', 0)
+
+func get_machine_coord() -> Vector2i:
+	var pos = position + player_last_direction * 20 + Vector2(0, 8)
+	var coord = Vector2i(pos.x / 16, pos.y / 16)
+	coord.x -= 1 if pos.x < 0 else 0
+	coord.y -= 1 if pos.y < 0 else 0
+	return coord * 16 + Vector2i(8, 8)
