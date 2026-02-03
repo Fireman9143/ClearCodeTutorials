@@ -70,6 +70,7 @@ gravity = Vector3(0, 0, 0)
 color = Color(0.0226478, 0.78587, 0.851327, 1)
 
 [node name="Sprinkler" instance=ExtResource("1_ntvga")]
+collision_layer = 16
 script = ExtResource("2_6on4u")
 
 [node name="CollisionShape2D" parent="." index="0"]

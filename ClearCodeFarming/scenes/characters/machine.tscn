@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bpyirovupxdd8" path="res://scenes/characters/machine.gd" id="1_abd8a"]
 
 [node name="Machine" type="StaticBody2D" groups=["Machines"]]
+collision_layer = 16
 script = ExtResource("1_abd8a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

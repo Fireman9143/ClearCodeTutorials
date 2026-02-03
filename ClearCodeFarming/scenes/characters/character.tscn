@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://ci7iu3vpr1ta6"]
+
+[ext_resource type="Script" uid="uid://b0fnv1p6sbkcv" path="res://scenes/characters/character.gd" id="1_1bdar"]
+[ext_resource type="Texture2D" uid="uid://82lwrlh4akix" path="res://graphics/characters/mouse.png" id="2_e22cc"]
+[ext_resource type="PackedScene" uid="uid://c74cis60ehowy" path="res://scenes/UI/dialogue.tscn" id="3_e22cc"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2qjml"]
+radius = 6.0
+height = 14.0
+
+[node name="Character" type="CharacterBody2D"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1_1bdar")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_e22cc")
+hframes = 4
+vframes = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_2qjml")
+
+[node name="Dialogue" parent="." instance=ExtResource("3_e22cc")]
+offset_right = 0.0
+offset_bottom = 0.0

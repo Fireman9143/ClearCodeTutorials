@@ -220,6 +220,7 @@ animations = [{
 }]
 
 [node name="Fisher" instance=ExtResource("1_0ue3f")]
+collision_layer = 16
 script = ExtResource("2_krji0")
 
 [node name="CollisionShape2D" parent="." index="0"]
