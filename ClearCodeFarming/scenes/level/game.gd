@@ -2,6 +2,7 @@ extends Node2D
 
 var plant_info_scene = preload("res://scenes/UI/plant_info.tscn")
 @onready var player = $Objects/Player
+@onready var character = $Objects/Character
 @onready var blob_scene: PackedScene = preload("res://scenes/enemy/blob.tscn")
 @onready var plant_scene: PackedScene = preload("res://scenes/level/plant.tscn")
 @onready var projectile_scene: PackedScene = preload("res://scenes/characters/projectile.tscn")
@@ -30,7 +31,6 @@ var machine_textures = {
 func _ready() -> void:
 	check_mud()
 	create_forcast()
-	$Objects/Scarecrow.connect("shoot", create_projectile)
 	
 func _process(_delta: float) -> void:
 	var daytime_point: float = 1.0 - ($DayTimer.time_left / $DayTimer.wait_time)

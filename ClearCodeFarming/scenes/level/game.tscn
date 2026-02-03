@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://bf0yuue48pk6v"]
+[gd_scene load_steps=35 format=4 uid="uid://bf0yuue48pk6v"]
 
 [ext_resource type="PackedScene" uid="uid://ca106qafnt25o" path="res://scenes/player/player.tscn" id="1_e6yxx"]
 [ext_resource type="Script" uid="uid://d2tvsasbb7i5d" path="res://scenes/level/game.gd" id="1_fq6ga"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://dv7etn6kbm7xl" path="res://scenes/UI/plant_info_container.tscn" id="11_d3kax"]
 [ext_resource type="PackedScene" uid="uid://2miscolt82pg" path="res://scenes/level/house.tscn" id="12_g280g"]
 [ext_resource type="Texture2D" uid="uid://da1u0rhfjt8a3" path="res://graphics/weather/drops.png" id="13_g35fm"]
+[ext_resource type="PackedScene" uid="uid://ci7iu3vpr1ta6" path="res://scenes/characters/character.tscn" id="13_mr15t"]
 [ext_resource type="Texture2D" uid="uid://capn581vt8q7g" path="res://graphics/icons/sprinkler.png" id="18_7q340"]
 
 [sub_resource type="Gradient" id="Gradient_ig4jx"]
@@ -1316,9 +1317,9 @@ metadata/_edit_lock_ = true
 z_index = -1
 
 [node name="simple_object" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(-87, 12)
-size = 3
+size = 1
+style = 1
 random = true
 
 [node name="simple_object4" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
@@ -1328,37 +1329,37 @@ size = 2
 random = true
 
 [node name="simple_object5" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(-39, 139)
-size = 2
+size = 1
 random = true
 
 [node name="simple_object6" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(147, 214)
 rotation = -0.523598
-size = 3
+style = 1
 random = true
 
 [node name="simple_object7" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 position = Vector2(90, 207)
-size = 1
-style = 1
 random = true
 
 [node name="simple_object2" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
+z_index = 0
 position = Vector2(-33, -11)
+size = 2
 style = 1
 random = true
 
 [node name="simple_object3" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(-20, 27)
-size = 3
 random = true
 
 [node name="House" parent="Objects" instance=ExtResource("12_g280g")]
 position = Vector2(244, -284)
+
+[node name="Character" parent="Objects" instance=ExtResource("13_mr15t")]
+position = Vector2(434, -83)
+collision_mask = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
