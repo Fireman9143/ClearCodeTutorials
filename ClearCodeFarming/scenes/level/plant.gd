@@ -12,14 +12,14 @@ var reward: Global.Item
 var death_count: int:
 	set(value):
 		death_count = value
-		emit_signal("dying")
+		#emit_signal("dying")
 var is_dead: bool:
 	set(value):
 		is_dead = value
 		emit_signal("died")
 signal death(grid_pos: Vector2i)
 signal died(is_dead: bool)
-signal dying
+#signal dying
 
 const plant_data = {
 	Global.Seeds.CORN: {
@@ -69,7 +69,7 @@ func setup(seed_enum: Global.Seeds, grid_position: Vector2i, plant_death_functio
 	reward = reward_item
 	grid_pos = grid_position
 	death.connect(plant_death_function)
-	dying.connect(update)
+	#dying.connect(update)
 	
 func update():
 	if death_count >= death_max:
@@ -94,7 +94,7 @@ func _on_area_2d_body_entered(_body: Node2D) -> void:
 		Global.change_item(reward, randi_range(2, 4))
 		is_dead = true
 		death.emit(grid_pos)
-		dying.emit()
+		#dying.emit()
 		queue_free()
 		
 func damage():
