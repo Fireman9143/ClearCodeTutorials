@@ -25,6 +25,7 @@ func _process(delta: float) -> void:
 		else:
 			progress -= 10 * delta
 		$Control/TextureProgressBar.value = progress
+		
 func reveal():
 	show()
 	$Fish.position.y = randf_range(-y_range/2.0, y_range/2.0)
@@ -41,4 +42,5 @@ func action():
 func _on_texture_progress_bar_value_changed(value: float) -> void:
 	if value <= 0 or value >= 100:
 		hide()
+		Global.change_item(Global.Item.FISH, 1 if value >= 100 else 0)
 		get_parent().stop_fishing()

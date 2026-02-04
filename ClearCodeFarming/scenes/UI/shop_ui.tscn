@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dy7u5bqy34p5u"]
+
+[ext_resource type="Script" uid="uid://c6kkopmemy1l" path="res://scenes/UI/shop_ui.gd" id="1_5tinp"]
+
+[sub_resource type="Theme" id="Theme_5tinp"]
+
+[node name="ShopUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5tinp")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.1
+anchor_right = 0.75
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_5tinp")
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
