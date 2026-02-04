@@ -73,10 +73,10 @@ func setup(seed_enum: Global.Seeds, grid_position: Vector2i, plant_death_functio
 	
 func update():
 	if death_count >= death_max:
-		queue_free()
 		is_dead = true
 		death.emit(grid_pos)
-	
+		queue_free()
+		
 func grow(watered: bool):
 	if watered:
 		age = min(age + grow_speed, max_age)
@@ -89,13 +89,13 @@ func grow(watered: bool):
 			is_dead = true
 			death.emit(grid_pos)
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
+func _on_area_2d_body_entered(_body: Node2D) -> void:
 	if age >= max_age:
 		Global.change_item(reward, randi_range(2, 4))
-		queue_free()
 		is_dead = true
 		death.emit(grid_pos)
 		dying.emit()
-
+		queue_free()
+		
 func damage():
 	death_count += 1

@@ -1336,38 +1336,35 @@ random = true
 [node name="simple_object4" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 z_index = 0
 position = Vector2(-146, 108)
-size = 3
+size = 2
 random = true
 
 [node name="simple_object5" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 position = Vector2(-39, 139)
+size = 1
 random = true
 
 [node name="simple_object6" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(147, 214)
 rotation = -0.523598
-size = 2
+size = 1
 random = true
 
 [node name="simple_object7" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(90, 207)
-size = 3
+style = 1
 random = true
 
 [node name="simple_object2" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 z_index = 0
 position = Vector2(-33, -11)
 size = 2
-style = 1
 random = true
 
 [node name="simple_object3" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 z_index = 0
 position = Vector2(-20, 27)
-size = 3
-style = 1
+size = 2
 random = true
 
 [node name="House" parent="Objects" instance=ExtResource("12_g280g")]

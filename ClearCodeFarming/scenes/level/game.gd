@@ -2,7 +2,6 @@ extends Node2D
 
 var plant_info_scene = preload("res://scenes/UI/plant_info.tscn")
 @onready var player = $Objects/Player
-#@onready var character = $Objects/Character
 @onready var blob_scene: PackedScene = preload("res://scenes/enemy/blob.tscn")
 @onready var plant_scene: PackedScene = preload("res://scenes/level/plant.tscn")
 @onready var projectile_scene: PackedScene = preload("res://scenes/characters/projectile.tscn")
@@ -165,6 +164,8 @@ func _on_player_build(current_machine: int) -> void:
 	if current_machine != Global.Machine.DELETE:
 		var machine = machine_scenes[current_machine].instantiate()
 		machine.setup(player.get_machine_coord(), self, $Objects)
+		if current_machine == Global.Machine.SCARECROW:
+			machine.connect("shoot", create_projectile)
 	else:
 		for machine in get_tree().get_nodes_in_group("Machines"):
 			machine.delete(player.get_machine_coord() / 16)
