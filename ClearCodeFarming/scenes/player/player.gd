@@ -99,9 +99,12 @@ func get_input():
 		var dir = Input.get_axis("tool_backward", "tool_forward")
 		current_tool = posmod(current_tool + int(dir), Global.Tools.size()) as Global.Tools
 		$ToolUI.reveal("tool")
+		get_tree().get_first_node_in_group("ResourceUI").visible = current_tool == Global.Tools.SEED
+	
 	if Input.is_action_just_pressed("seed_toggle"):
 		current_seed = posmod(current_seed + 1, Global.Seeds.size()) as Global.Seeds
 		$ToolUI.reveal("seed")
+	
 	if Input.is_action_just_pressed("plant") and current_tool == Global.Tools.SEED:
 		tool_state_machine.travel(tool_connect[current_tool])
 		$AnimationTree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
@@ -114,12 +117,15 @@ func get_input():
 		seed_use.emit(current_seed, position + player_last_direction * tool_direction_offset + Vector2(0, tool_y_offset))		
 		await get_tree().create_timer(0.5).timeout
 		can_move = true
+	
 	if Input.is_action_just_pressed("diagnose"):
 		diagnose.emit()
+	
 	if Input.is_action_just_pressed("toggle_style"):
 		current_style_index = posmod(current_style_index + 1, Global.unlocked_styles.size())
 		current_style = Global.unlocked_styles[current_style_index] as Global.Style
 		$Sprite2D.texture = player_skins[current_style]
+	
 	if Input.is_action_just_pressed("build"):
 		current_state = Global.State.BUILDING
 		current_machine =  Global.unlocked_machines[current_machine_index] as Global.Machine
@@ -142,6 +148,7 @@ func get_building_input():
 func get_shopping_input():
 	if Input.is_action_just_pressed("ui_cancel"):
 		close_shop.emit()
+		get_tree().get_first_node_in_group("ResourceUI").hide()
 	
 func animation():
 	if player_direction:
