@@ -1,8 +1,10 @@
 extends CharacterBody2D
 
 @export var dialog: Array[String]
+@export var fin_dialog: String
 @export var texture: Texture2D
 @export var shop_type: Global.Shop
+@export var has_fin_anim: bool
 var dialog_index:int
 var player: CharacterBody2D
 
@@ -33,6 +35,14 @@ func interact(player_char: CharacterBody2D):
 		$Dialogue.set_text(dialog[dialog_index])
 		dialog_index += 1
 	else:
-		$Dialogue.hide()
-		dialog_index = 0
-		open_shop.emit(shop_type)
+		if Global.shop_connection[shop_type]['tracker'].size() == Global.shop_connection[shop_type]['all'].size():
+			$Dialogue.set_text(fin_dialog)
+			if has_fin_anim:
+				var tween = create_tween()
+				tween.tween_property($Sprite2D, 'frame', 23, 1.6).from(16)
+				tween.tween_property($Sprite2D, 'frame', 0, 0)
+		else:
+			$Dialogue.hide()
+			dialog_index = 0
+			open_shop.emit(shop_type)
+			get_tree().get_first_node_in_group("ResourceUI").reveal(false)
