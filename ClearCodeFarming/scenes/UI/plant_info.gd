@@ -12,7 +12,8 @@ func setup(source):
 	plant.died.connect(update)
 	
 func update():
-	$HBoxContainer/VBoxContainer/GrowthBar.value = plant.age
-	$HBoxContainer/VBoxContainer/DeathBar.value = plant.death_count
-	if plant.death_count >= plant.death_max:
-		queue_free()
+	if plant:
+		$HBoxContainer/VBoxContainer/GrowthBar.value = plant.age
+		$HBoxContainer/VBoxContainer/DeathBar.value = plant.death_count
+		if plant.death_count >= plant.death_max:
+			queue_free()
