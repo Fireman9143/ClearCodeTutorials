@@ -36,6 +36,8 @@ SCARECROW NO LONGER SHOOTS
 
 HARVESTING PLANTS CAUSES AN ERROR
 
+The cat glitches out when interacting from some sides
+
 There is currently an animation for seed that is activated with the spacebar, and the same animation when you plant a seed with "F".  This redundancy needs to be reconciled.  Plan to get rid of "F" plant action and just have planting as a regular action.  Hopefully this will simplify future game controller integration?
 
 Reworking blobs. Blobs will spawn on top of the same spawn point.  Trying to figure out logic to prevent that.  Blob push() does not work with sword.
