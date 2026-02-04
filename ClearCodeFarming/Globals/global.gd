@@ -96,14 +96,14 @@ const ITEM_IMAGES = {
 var items = {
 	Item.WOOD: 0,
 	Item.APPLE: 0,
-	Item.TOMATO: 1,
-	Item.CORN: 1,
-	Item.WHEAT: 1,
-	Item.PUMPKIN: 1,
+	Item.TOMATO: 40,
+	Item.CORN: 40,
+	Item.WHEAT: 40,
+	Item.PUMPKIN: 40,
 	Item.FISH: 1,
 }
 
-func change_item(item: Global.Item, amount: int = 1):
+func change_item(item: Global.Item, amount: int = 1, auto_hide: bool = true):
 	items[item] += amount
-	get_tree().get_first_node_in_group("ResourceUI").reveal()
+	get_tree().get_first_node_in_group("ResourceUI").reveal(auto_hide)
 	
