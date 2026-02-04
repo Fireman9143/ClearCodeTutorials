@@ -1105,6 +1105,7 @@ y_sort_enabled = true
 [node name="Player" parent="Objects" instance=ExtResource("1_e6yxx")]
 y_sort_enabled = true
 position = Vector2(490, -83)
+collision_mask = 29
 
 [node name="trees" type="Node2D" parent="Objects"]
 y_sort_enabled = true
@@ -1321,35 +1322,34 @@ metadata/_edit_lock_ = true
 z_index = -1
 
 [node name="simple_object" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
+z_index = 0
 position = Vector2(-87, 12)
-size = 1
+size = 3
 style = 1
 random = true
 
 [node name="simple_object4" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(-146, 108)
-size = 2
-style = 1
+size = 1
 random = true
 
 [node name="simple_object5" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 position = Vector2(-39, 139)
 size = 1
-style = 1
 random = true
 
 [node name="simple_object6" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 z_index = 0
 position = Vector2(147, 214)
 rotation = -0.523598
-size = 2
+size = 3
+style = 1
 random = true
 
 [node name="simple_object7" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(90, 207)
-size = 2
+size = 1
+style = 1
 random = true
 
 [node name="simple_object2" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
@@ -1359,9 +1359,8 @@ size = 2
 random = true
 
 [node name="simple_object3" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-z_index = 0
 position = Vector2(-20, 27)
-size = 3
+size = 1
 random = true
 
 [node name="House" parent="Objects" instance=ExtResource("12_g280g")]
@@ -1371,12 +1370,16 @@ position = Vector2(244, -284)
 position = Vector2(434, -83)
 collision_mask = 2
 dialog = Array[String](["I am the hat mouse", "State your business"])
+fin_dialog = "You purchased all the hats!"
 texture = ExtResource("14_7q340")
 shop_type = 1
+has_fin_anim = true
 
 [node name="Character2" parent="Objects" instance=ExtResource("13_mr15t")]
 position = Vector2(338, -62)
+collision_mask = 2
 dialog = Array[String](["I sell machines", "Which machine would you like?"])
+fin_dialog = "You have all the machines!"
 texture = ExtResource("15_pfgns")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
