@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var player: CharacterBody2D #= get_tree().get_first_node_in_group("player")
+var player: CharacterBody2D
 var push_distance := 75
 var push_direction: Vector2
 var blob_direction: Vector2
@@ -25,7 +25,7 @@ func _physics_process(_delta: float) -> void:
 		blob_direction = (plant_target.position - position).normalized()
 		velocity = blob_direction * blob_speed + push_direction
 		move_and_slide()
-		animation()
+		#animation()
 		if position.distance_to(plant_target.position) < 10 and active:
 			plant_target.damage()
 			active = false
@@ -33,15 +33,15 @@ func _physics_process(_delta: float) -> void:
 	else:
 		explode()
 	
-func animation():
-	if player:
-		blob_state.travel("move")
-		var rounded_direction: Vector2 = Vector2(round(blob_direction.x), round(blob_direction.y))
-		$AnimationTree.set("parameters/BlobMoveStateMachine/move/blend_position", rounded_direction)
-		$AnimationTree.set("parameters/BlobMoveStateMachine/idle/blend_position", rounded_direction)
-		$AnimationTree.set("parameters/BlobMoveStateMachine/explode/blend_position", rounded_direction)
-	else:
-		blob_state.travel("idle")
+#func animation():
+	#if player:
+		#blob_state.travel("move")
+		#var rounded_direction: Vector2 = Vector2(round(blob_direction.x), round(blob_direction.y))
+		#$AnimationTree.set("parameters/BlobMoveStateMachine/move/blend_position", rounded_direction)
+		#$AnimationTree.set("parameters/BlobMoveStateMachine/idle/blend_position", rounded_direction)
+		#$AnimationTree.set("parameters/BlobMoveStateMachine/explode/blend_position", rounded_direction)
+	#else:
+		#blob_state.travel("idle")
 	
 func hit(dir:Vector2 = Vector2.ZERO):
 	push(dir)
