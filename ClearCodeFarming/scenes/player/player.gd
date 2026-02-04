@@ -10,10 +10,13 @@ var player_speed: int = 70
 @onready var move_state_machine: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/MoveeStateMachine/playback")
 @onready var tool_state_machine: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/ToolStateMachine/playback")
 var can_move: bool = true
-var current_state: Global.State =  Global.State.DEFAULT
-var current_tool: Global.Tools = Global.Tools.SWORD
-var current_style: Global.Style = Global.Style.BASIC
-var current_machine: Global.Machine = Global.Machine.SPRINKLER
+var current_state: Global.State
+var current_tool: Global.Tools
+var current_style: Global.Style
+var current_style_index: int
+var current_machine: Global.Machine
+var current_machine_index: int
+
 const player_skins = {
 	Global.Style.BASIC: preload("res://graphics/characters/main_basic.png"),
 	Global.Style.BASEBALL: preload("res://graphics/characters/main_blue.png"),
@@ -40,6 +43,7 @@ signal diagnose
 signal day_change
 signal build(current_machine: Global.Machine)
 signal machine_change(current_machine: Global.Machine)
+signal close_shop
 
 func _physics_process(_delta: float) -> void:
 	match current_state:
@@ -54,6 +58,8 @@ func _physics_process(_delta: float) -> void:
 			get_building_input()
 			move()
 			animation()
+		Global.State.SHOP:
+			get_shopping_input()
 			
 func move():
 	player_direction = Input.get_vector("left", "right", "up", "down")
@@ -111,10 +117,12 @@ func get_input():
 	if Input.is_action_just_pressed("diagnose"):
 		diagnose.emit()
 	if Input.is_action_just_pressed("toggle_style"):
-		current_style = posmod(current_style + 1, Global.Style.size()) as Global.Style
+		current_style_index = posmod(current_style_index + 1, Global.unlocked_styles.size())
+		current_style = Global.unlocked_styles[current_style_index] as Global.Style
 		$Sprite2D.texture = player_skins[current_style]
 	if Input.is_action_just_pressed("build"):
 		current_state = Global.State.BUILDING
+		current_machine =  Global.unlocked_machines[current_machine_index] as Global.Machine
 		
 func get_fishing_input():
 	if Input.is_action_just_pressed("action"):
@@ -125,11 +133,16 @@ func get_building_input():
 		current_state = Global.State.DEFAULT
 	if Input.is_action_just_pressed("tool_forward") or Input.is_action_just_pressed("tool_backward"):
 		var dir = Input.get_axis("tool_backward", "tool_forward")
-		current_machine = posmod(current_machine + int(dir), Global.Machine.size()) as Global.Machine
+		current_machine_index = posmod(current_machine_index + int(dir), Global.unlocked_machines.size())
+		current_machine =  Global.unlocked_machines[current_machine_index] as Global.Machine
 		machine_change.emit(current_machine)
 	if Input.is_action_just_pressed("action"):
 		build.emit(current_machine)
 		
+func get_shopping_input():
+	if Input.is_action_just_pressed("ui_cancel"):
+		close_shop.emit()
+	
 func animation():
 	if player_direction:
 		move_state_machine.travel("walk")
