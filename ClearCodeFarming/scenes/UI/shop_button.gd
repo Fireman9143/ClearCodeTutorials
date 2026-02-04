@@ -3,6 +3,7 @@ extends Button
 var item_enum
 var shop_type: Global.Shop
 var unlocked: Array
+var source
 signal press(shop_type)
 
 func setup(new_shop_type, new_item_enum, parent):
@@ -10,7 +11,7 @@ func setup(new_shop_type, new_item_enum, parent):
 	shop_type = new_shop_type
 	
 	parent.add_child(self)
-	var source = Global.STYLE_UPGRADES if shop_type == Global.Shop.HAT else Global.MACHINE_UPGRADE_COST
+	source = Global.STYLE_UPGRADES if shop_type == Global.Shop.HAT else Global.MACHINE_UPGRADE_COST
 	var data = source[item_enum]
 	unlocked = Global.unlocked_machines if shop_type == Global.Shop.MAIN else Global.unlocked_styles
 	var item1 = Global.ITEM_IMAGES[data['cost'].keys()[0]]
@@ -34,5 +35,10 @@ func _on_focus_exited() -> void:
 
 
 func _on_pressed() -> void:
-	unlocked.append(item_enum)
-	press.emit(shop_type)
+	var cost_enum = source[item_enum]['cost'].keys()
+	var cost_value = source[item_enum]['cost'].values()
+	if Global.items[cost_enum[0]] > cost_value[0] and Global.items[cost_enum[1]] > cost_value[1]:
+		Global.change_item(cost_enum[0], -cost_value[0], false)
+		Global.change_item(cost_enum[1], -cost_value[1], false)
+		unlocked.append(item_enum)
+		press.emit(shop_type)

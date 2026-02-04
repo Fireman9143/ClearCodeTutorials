@@ -20,4 +20,4 @@ func reveal(shop_type: Global.Shop = Global.Shop.HAT):
 		$GridContainer.get_child(0).grab_focus()
 	else:
 		close.emit()
-		
+		get_tree().get_first_node_in_group("ResourceUI").hide()
