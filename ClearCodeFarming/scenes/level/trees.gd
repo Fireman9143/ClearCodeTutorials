@@ -14,6 +14,7 @@ var health := number_of_apples + 1:
 				$CollisionShape2D.position.y = 6
 				for apple in $Apples.get_children():
 					apple.queue_free()
+				Global.change_item(Global.Item.WOOD, randi_range(2, 4))
 				
 func _ready() -> void:
 	$TreeSprite.frame = [0, 1].pick_random()
@@ -44,3 +45,4 @@ func create_apples(num: int = (3 - $Apples.get_children().size())):
 func get_apple():
 	if $Apples.get_children():
 		$Apples.get_children().pick_random().queue_free()
+		Global.change_item(Global.Item.APPLE)

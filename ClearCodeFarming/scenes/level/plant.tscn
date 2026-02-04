@@ -4,11 +4,10 @@
 [ext_resource type="Script" uid="uid://dnn3seihvv61r" path="res://scenes/level/plant.gd" id="1_x6yfg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x6yfg"]
-size = Vector2(6, 7)
+size = Vector2(4, 7)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x6yfg"]
-radius = 5.0
-height = 28.0
+radius = 6.0
 
 [node name="Plant" type="StaticBody2D" groups=["Plants"]]
 y_sort_enabled = true
@@ -31,3 +30,5 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CapsuleShape2D_x6yfg")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

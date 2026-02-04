@@ -8,7 +8,7 @@ var age: float
 var max_age: int
 var grow_speed: float
 var death_max: int
-var reward: int
+var reward: Global.Item
 var death_count: int:
 	set(value):
 		death_count = value
@@ -59,13 +59,14 @@ const plant_data = {
 		"reward": Global.Item.WHEAT,
 	},
 }
-func setup(seed_enum: Global.Seeds, grid_position: Vector2i, plant_death_function):
+func setup(seed_enum: Global.Seeds, grid_position: Vector2i, plant_death_function, reward_item: Global.Item):
 	$Sprite2D.texture = plant_data[seed_enum]['texture']
 	icon_texture = plant_data[seed_enum]['icon_texture']
 	plant_name = plant_data[seed_enum]['plant_name']
 	max_age = plant_data[seed_enum]['max_age']
 	grow_speed = plant_data[seed_enum]['grow_speed']
 	death_max = plant_data[seed_enum]['death_max']
+	reward = reward_item
 	grid_pos = grid_position
 	death.connect(plant_death_function)
 	dying.connect(update)
@@ -88,8 +89,10 @@ func grow(watered: bool):
 			is_dead = true
 			death.emit(grid_pos)
 
-func _on_area_2d_body_entered(_body: Node2D) -> void:
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	print(body)
 	if age >= max_age:
+		Global.change_item(reward, randi_range(2, 4))
 		queue_free()
 		is_dead = true
 		death.emit(grid_pos)

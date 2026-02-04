@@ -2,7 +2,7 @@ extends Node2D
 
 var plant_info_scene = preload("res://scenes/UI/plant_info.tscn")
 @onready var player = $Objects/Player
-@onready var character = $Objects/Character
+#@onready var character = $Objects/Character
 @onready var blob_scene: PackedScene = preload("res://scenes/enemy/blob.tscn")
 @onready var plant_scene: PackedScene = preload("res://scenes/level/plant.tscn")
 @onready var projectile_scene: PackedScene = preload("res://scenes/characters/projectile.tscn")
@@ -31,6 +31,8 @@ var machine_textures = {
 func _ready() -> void:
 	check_mud()
 	create_forcast()
+	for character in get_tree().get_nodes_in_group("Characters"):
+		character.connect("open_shop", open_shop)
 	
 func _process(_delta: float) -> void:
 	var daytime_point: float = 1.0 - ($DayTimer.time_left / $DayTimer.wait_time)
@@ -84,15 +86,23 @@ func _on_player_seed_use(seed_enum: int, pos: Vector2) -> void:
 	grid_pos.y -= 1 if grid_pos.y < 0 else 0
 	var cell = $Layers/SoilLayer.get_cell_tile_data(grid_pos) as TileData
 	if cell and grid_pos not in used_cells:
-		var plant_pos = Vector2(grid_pos.x * 16 + 8, grid_pos.y * 16 - 4)
-		var plant = plant_scene.instantiate() as StaticBody2D
-		plant.setup(seed_enum, grid_pos, plant_death)
-		$Objects.add_child(plant)
-		plant.position = plant_pos
-		used_cells.append(grid_pos)
-		var plant_info = plant_info_scene.instantiate()
-		plant_info.setup(plant)
-		$CanvasLayer/PlantInfoContainer.add(plant_info)
+		var selected_item = {
+			Global.Seeds.TOMATO: Global.Item.TOMATO,
+			Global.Seeds.CORN: Global.Item.CORN,
+			Global.Seeds.WHEAT: Global.Item.WHEAT,
+			Global.Seeds.PUMPKIN: Global.Item.PUMPKIN,
+		}[player.current_seed]
+		if Global.items[selected_item] > 0:
+			Global.change_item(selected_item, -1)
+			var plant_pos = Vector2(grid_pos.x * 16 + 8, grid_pos.y * 16 - 4)
+			var plant = plant_scene.instantiate() as StaticBody2D
+			plant.setup(seed_enum, grid_pos, plant_death, selected_item)
+			$Objects.add_child(plant)
+			plant.position = plant_pos
+			used_cells.append(grid_pos)
+			var plant_info = plant_info_scene.instantiate()
+			plant_info.setup(plant)
+			$CanvasLayer/PlantInfoContainer.add(plant_info)
 		
 func _on_player_diagnose() -> void:
 	$CanvasLayer/PlantInfoContainer.visible = not $CanvasLayer/PlantInfoContainer.visible
@@ -174,3 +184,11 @@ func water_plants(coord: Vector2i):
 		var cell = coord + dir
 		if cell in $Layers/SoilLayer.get_used_cells():
 			$Layers/SoilWaterLayer.set_cell(cell, 1, Vector2i(randi_range(0, 2), 0))
+
+func open_shop(shop_type: Global.Shop):
+	$CanvasLayer/ShopUI.reveal(shop_type)
+	player.current_state = Global.State.SHOP
+
+func _on_player_close_shop() -> void:
+	$CanvasLayer/ShopUI.hide()
+	player.current_state = Global.State.DEFAULT

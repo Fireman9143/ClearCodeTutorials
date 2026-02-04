@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=4 uid="uid://bf0yuue48pk6v"]
+[gd_scene load_steps=39 format=4 uid="uid://bf0yuue48pk6v"]
 
 [ext_resource type="PackedScene" uid="uid://ca106qafnt25o" path="res://scenes/player/player.tscn" id="1_e6yxx"]
 [ext_resource type="Script" uid="uid://d2tvsasbb7i5d" path="res://scenes/level/game.gd" id="1_fq6ga"]
@@ -16,7 +16,11 @@
 [ext_resource type="PackedScene" uid="uid://2miscolt82pg" path="res://scenes/level/house.tscn" id="12_g280g"]
 [ext_resource type="Texture2D" uid="uid://da1u0rhfjt8a3" path="res://graphics/weather/drops.png" id="13_g35fm"]
 [ext_resource type="PackedScene" uid="uid://ci7iu3vpr1ta6" path="res://scenes/characters/character.tscn" id="13_mr15t"]
-[ext_resource type="Texture2D" uid="uid://capn581vt8q7g" path="res://graphics/icons/sprinkler.png" id="18_7q340"]
+[ext_resource type="Texture2D" uid="uid://82lwrlh4akix" path="res://graphics/characters/mouse.png" id="14_7q340"]
+[ext_resource type="Texture2D" uid="uid://bu056qc6q7lqa" path="res://graphics/characters/cat.png" id="15_pfgns"]
+[ext_resource type="PackedScene" uid="uid://dy7u5bqy34p5u" path="res://scenes/UI/shop_ui.tscn" id="18_pfgns"]
+[ext_resource type="PackedScene" uid="uid://clbx3l6rx66uf" path="res://scenes/UI/resource_ui.tscn" id="19_wv7p2"]
+[ext_resource type="Texture2D" uid="uid://fnmyohadow27" path="res://graphics/icons/delete.png" id="20_pfgns"]
 
 [sub_resource type="Gradient" id="Gradient_ig4jx"]
 offsets = PackedFloat32Array(0, 0.454023, 1)
@@ -1326,32 +1330,38 @@ random = true
 z_index = 0
 position = Vector2(-146, 108)
 size = 2
+style = 1
 random = true
 
 [node name="simple_object5" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 position = Vector2(-39, 139)
 size = 1
-random = true
-
-[node name="simple_object6" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
-position = Vector2(147, 214)
-rotation = -0.523598
 style = 1
 random = true
 
+[node name="simple_object6" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
+z_index = 0
+position = Vector2(147, 214)
+rotation = -0.523598
+size = 2
+random = true
+
 [node name="simple_object7" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
+z_index = 0
 position = Vector2(90, 207)
+size = 2
 random = true
 
 [node name="simple_object2" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
 z_index = 0
 position = Vector2(-33, -11)
 size = 2
-style = 1
 random = true
 
 [node name="simple_object3" parent="Objects/rocksNgrass" instance=ExtResource("10_0o7gw")]
+z_index = 0
 position = Vector2(-20, 27)
+size = 3
 random = true
 
 [node name="House" parent="Objects" instance=ExtResource("12_g280g")]
@@ -1360,6 +1370,14 @@ position = Vector2(244, -284)
 [node name="Character" parent="Objects" instance=ExtResource("13_mr15t")]
 position = Vector2(434, -83)
 collision_mask = 2
+dialog = Array[String](["I am the hat mouse", "State your business"])
+texture = ExtResource("14_7q340")
+shop_type = 1
+
+[node name="Character2" parent="Objects" instance=ExtResource("13_mr15t")]
+position = Vector2(338, -62)
+dialog = Array[String](["I sell machines", "Which machine would you like?"])
+texture = ExtResource("15_pfgns")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -1385,6 +1403,10 @@ emitting = false
 amount = 2000
 texture = ExtResource("13_g35fm")
 process_material = SubResource("ParticleProcessMaterial_bften")
+
+[node name="ShopUI" parent="CanvasLayer" instance=ExtResource("18_pfgns")]
+
+[node name="ResourceUI" parent="CanvasLayer" instance=ExtResource("19_wv7p2")]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_ig4jx")
@@ -1420,12 +1442,15 @@ wait_time = 20.0
 autostart = true
 
 [node name="MachinePreviewSprite" type="Sprite2D" parent="."]
-texture = ExtResource("18_7q340")
+position = Vector2(350, -45)
+texture = ExtResource("20_pfgns")
 
 [connection signal="build" from="Objects/Player" to="." method="_on_player_build"]
+[connection signal="close_shop" from="Objects/Player" to="." method="_on_player_close_shop"]
 [connection signal="day_change" from="Objects/Player" to="." method="_on_player_day_change"]
 [connection signal="diagnose" from="Objects/Player" to="." method="_on_player_diagnose"]
 [connection signal="machine_change" from="Objects/Player" to="." method="_on_player_machine_change"]
 [connection signal="seed_use" from="Objects/Player" to="." method="_on_player_seed_use"]
 [connection signal="tool_use" from="Objects/Player" to="." method="_on_player_tool_use"]
+[connection signal="close" from="CanvasLayer/ShopUI" to="." method="_on_player_close_shop"]
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
