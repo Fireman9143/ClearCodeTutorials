@@ -1,8 +1,9 @@
-[gd_scene load_steps=58 format=3 uid="uid://bbk58u04yav86"]
+[gd_scene load_steps=59 format=3 uid="uid://bbk58u04yav86"]
 
 [ext_resource type="Script" uid="uid://c57ahep4hsu7g" path="res://scenes/enemy/blob.gd" id="1_3ex0u"]
 [ext_resource type="Texture2D" uid="uid://dgn5uano06j1y" path="res://graphics/characters/blob.png" id="1_kmvqb"]
 [ext_resource type="Shader" uid="uid://dnp4lcqbvsy7p" path="res://scenes/enemy/blob_flash.gdshader" id="2_3np4e"]
+[ext_resource type="AudioStream" uid="uid://bbcek5ylyp7pt" path="res://audio/slime.ogg" id="4_3np4e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dvv0d"]
 resource_local_to_scene = true
@@ -75,6 +76,21 @@ tracks/1/keys = {
 "method": &"queue_free"
 }]
 }
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer2D")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("4_3np4e")
+}],
+"times": PackedFloat32Array(0.166667)
+}
+tracks/2/use_blend = true
 
 [sub_resource type="Animation" id="Animation_ch86d"]
 resource_name = "Blob_explode_left"
@@ -507,6 +523,8 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 visible = false
 shape = SubResource("CircleShape2D_dtlyt")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

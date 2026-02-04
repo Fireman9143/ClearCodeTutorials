@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var player: CharacterBody2D
+@onready var player = get_tree().get_first_node_in_group("player")
 var push_distance := 75
 var push_direction: Vector2
 var blob_direction: Vector2
