@@ -32,15 +32,18 @@ CURRENT ISSUES WORKING:
 
 HOUSE WALL TILEMAP IS NOT APPLYING CORRECTLY
 
+SCARECROW NO LONGER SHOOTS
+
+HARVESTING PLANTS CAUSES AN ERROR
+
 There is currently an animation for seed that is activated with the spacebar, and the same animation when you plant a seed with "F".  This redundancy needs to be reconciled.  Plan to get rid of "F" plant action and just have planting as a regular action.  Hopefully this will simplify future game controller integration?
 
 Reworking blobs. Blobs will spawn on top of the same spawn point.  Trying to figure out logic to prevent that.  Blob push() does not work with sword.
-NEW BREAKING ISSUE: TRYING TO ATTACK BLOB NOW CAUSES A NULL ERROR FOR PLAYER.POSITION
 
 Discovered that apples reappear over a stump after a certain time, and don't always go back to if partially picked (unless it added a third in the same place).
 
-When the blobs are killed it causes an error with the tween.  Not sure what's happening yet.
-
 If a plant is placed on an already watered spot, the water spot goes away.  Not a huge issue because the sprinkler will recover, just a glitch.
+
+
 
 
