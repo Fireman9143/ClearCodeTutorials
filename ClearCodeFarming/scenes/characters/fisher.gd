@@ -28,7 +28,7 @@ func _process(_delta: float) -> void:
 
 func _on_timer_timeout() -> void:
 	start_fishing()
-	
+	Global.change_item(Global.Item.FISH, 1)
 	
 func start_fishing():
 	$AnimatedSprite2D.play(animations[direction])

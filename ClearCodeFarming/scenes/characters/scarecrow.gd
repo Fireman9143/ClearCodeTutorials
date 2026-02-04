@@ -17,4 +17,3 @@ func _on_timer_timeout() -> void:
 		var nearest_blob = get_closest_blob(blobs)
 		if nearest_blob.position.distance_to(position) <= max_range:
 			shoot.emit(position, (nearest_blob.position - position).normalized())
-			print("shooting")

@@ -220,7 +220,6 @@ animations = [{
 }]
 
 [node name="Fisher" instance=ExtResource("1_0ue3f")]
-collision_layer = 16
 script = ExtResource("2_krji0")
 
 [node name="CollisionShape2D" parent="." index="0"]
@@ -232,7 +231,7 @@ sprite_frames = SubResource("SpriteFrames_1h0s0")
 animation = &"left_idle"
 
 [node name="Timer" type="Timer" parent="." index="2"]
-wait_time = 20.0
+wait_time = 30.0
 one_shot = true
 
 [node name="Control" type="Control" parent="." index="3"]
