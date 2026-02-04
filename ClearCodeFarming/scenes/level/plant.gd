@@ -90,12 +90,12 @@ func grow(watered: bool):
 			death.emit(grid_pos)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	print(body)
 	if age >= max_age:
 		Global.change_item(reward, randi_range(2, 4))
 		queue_free()
 		is_dead = true
 		death.emit(grid_pos)
+		dying.emit()
 
 func damage():
 	death_count += 1

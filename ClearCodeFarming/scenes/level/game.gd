@@ -8,11 +8,13 @@ var plant_info_scene = preload("res://scenes/UI/plant_info.tscn")
 @onready var projectile_scene: PackedScene = preload("res://scenes/characters/projectile.tscn")
 @export var daytime_gradient: Gradient
 @export var rain_color: Color
+@export var volume_curve: Curve
 var raining: bool:
 	set(value):
 		raining = value
 		$Layers/RainDropSplash.emitting = value
 		$CanvasLayer/RainDropParticles.emitting = value
+		$RainSounds.playing = value
 @export_range(0.0, 100.0, 1.0) var rain_chance_percent: float = randf_range(0.0, 100.0)
 var randomf: float
 var rain_chance: float
@@ -38,6 +40,7 @@ func _process(_delta: float) -> void:
 	var daytime_point: float = 1.0 - ($DayTimer.time_left / $DayTimer.wait_time)
 	$CanvasModulate.color = daytime_gradient.sample(daytime_point).lerp(rain_color, 0.5 if raining else 0.0)
 	$CanvasLayer/PlantInfoContainer.update_all()
+	$AudioStreamPlayer.volume_db = volume_curve.sample(daytime_point)
 	if Input.is_action_just_pressed("ui_focus_next"):
 		day_switch()
 	
